@@ -10,7 +10,6 @@ import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -31,15 +30,16 @@ public class GraphQLService {
 
     @Value("classpath:books.graphql")
     Resource resource;
-
-    @Autowired
     private BookRepository bookRepository;
-
     private GraphQL graphQL;
-    @Autowired
     private AllBooksDataFetcher allBooksDataFetcher;
-    @Autowired
     private BookDataFetcher bookDataFetcher;
+
+    public GraphQLService(BookRepository bookRepository, AllBooksDataFetcher allBooksDataFetcher, BookDataFetcher bookDataFetcher) {
+        this.bookRepository = bookRepository;
+        this.allBooksDataFetcher = allBooksDataFetcher;
+        this.bookDataFetcher = bookDataFetcher;
+    }
 
     @PostConstruct
     private void loadSchema() throws IOException {
